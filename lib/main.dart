@@ -1,6 +1,18 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
-void main() => runApp(HelloApp());
+void main() => runApp(ChangeNotifierProvider(
+      create: (context) => HelloModel(),
+      child: HelloApp(),
+    ));
+
+class HelloModel extends ChangeNotifier {
+  var count = 0;
+  void inc() {
+    count += 1;
+    notifyListeners();
+  }
+}
 
 class HelloApp extends StatelessWidget {
   const HelloApp({super.key});
@@ -19,8 +31,27 @@ class HelloHome extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Text("Hello"),
+    return Scaffold(body: HelloCounter());
+  }
+}
+
+class HelloCounter extends StatelessWidget {
+  const HelloCounter({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        Consumer<HelloModel>(builder: (context, hello, child) {
+          return Text('${hello.count}');
+        }),
+        ElevatedButton(
+          onPressed: () {
+            Provider.of<HelloModel>(context, listen: false).inc();
+          },
+          child: Text("Increment"),
+        ),
+      ],
     );
   }
 }
