@@ -47,7 +47,8 @@ class HelloCounter extends StatelessWidget {
         }),
         ElevatedButton(
           onPressed: () {
-            Provider.of<HelloModel>(context, listen: false).inc();
+            //Provider.of<HelloModel>(context, listen: false).inc();
+            context.read<HelloModel>().inc();
           },
           child: Text("Increment"),
         ),
